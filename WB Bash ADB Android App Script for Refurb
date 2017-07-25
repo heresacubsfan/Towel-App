@@ -1,0 +1,31 @@
+#!/bin/bash
+# Script adb+
+# Usage
+# You can run any command adb provides on all your currently connected devices
+# ./adb+ <command> is the equivalent of ./adb -s <serial number> <command>
+# This will do the following: Erase clinic json files, push stock content, push the installer, and then run the installer.
+
+#Start the server with root privileges
+adb kill-server
+sudo adb start-server
+outcome123
+
+adb wait-for-device
+adb devices | tail -n +2 | cut -sf 1 | xargs -iX adb -s X root
+
+#Uninstalls any previous version of refurb app
+adb devices | tail -n +2 | cut -sf 1 | xargs -iX adb -s X uninstall appinventor.ai_caleb_richardson.Towel
+
+
+#Installs refurb app
+adb devices | tail -n +2 | cut -sf 1 | xargs -iX adb -s X install /home/outcomehealth/Documents/Towel.apk
+
+#Runs refurb app
+adb devices | tail -n +2 | cut -sf 1 | xargs -iX adb -s X shell monkey -p appinventor.ai_caleb_richardson.Towel -c android.intent.category.LAUNCHER 1
+
+#Disconnects devices
+adb devices | tail -n +2 | cut -sf 1 | xargs -iX adb -s X disconnect
+
+#Clears the screen and notifies the user it is ready for the next device.
+clear
+echo "Refurbish application installed. Ready for the next device."
